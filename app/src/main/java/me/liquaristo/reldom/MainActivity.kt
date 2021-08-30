@@ -59,23 +59,27 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             numberView.isClickable = false
             imageView.visibility = VISIBLE
             thread {
-                while (dataPool.size < 4);
-                val currentData: List<List<Float>> = dataPool.toList()
+                var currentData: List<List<Float>>
+                do {
+                    currentData = dataPool.toList().filterNotNull()
+                } while(currentData.size < 4)
                 dataPool.clear()
                 val extractedData: MutableList<Int> = mutableListOf()
                 for (dataGroup in currentData) {
                     val extracted = abs(dataGroup[0] * dataGroup[1] + dataGroup[2])
-                    val decimal = extracted - extracted.toInt()
-                    extractedData.add((decimal * 10000000).toInt())
+                    val decimal = extracted * 64 - (extracted * 128).toInt()
+                    extractedData.add((decimal * 16384).toInt())
                 }
                 println(extractedData.toString())
                 val randomResult = extractedData[0] xor extractedData[1] xor extractedData[2] xor extractedData[3]
                 vibratePhone()
-                this@MainActivity.runOnUiThread(java.lang.Runnable {
-                    this.numberView.text = randomResult.toString()
-                    this.imageView.visibility = GONE
-                    this.numberView.isClickable = true
-                })
+                this@MainActivity.runOnUiThread(
+                    java.lang.Runnable {
+                        numberView.text = randomResult.toString()
+                        imageView.visibility = GONE
+                        numberView.isClickable = true
+                    },
+                )
             }
         }
         numberView.setOnLongClickListener {
@@ -93,9 +97,12 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
+    @Synchronized
     override fun onSensorChanged(event: SensorEvent?) {
-        val data = listOf(event!!.values[0], event.values[1], event.values[2])
-        dataPool.add(data)
+        if (true || dataPool.size < 4) {
+            val data = listOf(event!!.values[0], event.values[1], event.values[2])
+            dataPool.add(data)
+        }
         if (dataPool.size > 4) {
             dataPool.removeAt(0)
         }
