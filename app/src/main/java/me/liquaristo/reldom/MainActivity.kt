@@ -7,13 +7,11 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.*
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View.*
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import java.lang.Thread.sleep
+import androidx.appcompat.app.AppCompatActivity
 import kotlin.concurrent.thread
 import kotlin.math.abs
 
@@ -44,7 +42,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             }.show()
             */
             dataSource?.also { accelerometer ->
-                sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)
+                sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME)
             }
         } else {
             with(AlertDialog.Builder(this)) {
@@ -88,7 +86,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
-    fun vibratePhone() {
+    private fun vibratePhone() {
         val vibrator = this.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         if (Build.VERSION.SDK_INT >= 26) {
             vibrator.vibrate(VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE))
@@ -99,10 +97,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     @Synchronized
     override fun onSensorChanged(event: SensorEvent?) {
-        if (true || dataPool.size < 4) {
-            val data = listOf(event!!.values[0], event.values[1], event.values[2])
-            dataPool.add(data)
-        }
+        val data = listOf(event!!.values[0], event.values[1], event.values[2])
+        dataPool.add(data)
         if (dataPool.size > 4) {
             dataPool.removeAt(0)
         }
