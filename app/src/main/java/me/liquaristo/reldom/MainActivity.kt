@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 val extractedData: MutableList<Int> = mutableListOf()
                 for (dataGroup in currentData) {
                     val extracted = abs(dataGroup[0] * dataGroup[1] + dataGroup[2])
-                    val decimal = extracted * 64 - (extracted * 128).toInt()
+                    val decimal = extracted * 64 - (extracted * 64).toInt()
                     extractedData.add((decimal * 16384).toInt())
                 }
                 println(extractedData.toString())
