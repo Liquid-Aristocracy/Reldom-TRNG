@@ -2,11 +2,11 @@
     <string name="app_name">Reldom</string>
     <string name="num">Tap</string>
     <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
+    <string name="messages_header">Profile</string>
+    <string name="sync_header">Appearance</string>
 
     <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
+    <string name="signature_title">A</string>
     <string name="reply_title">Default reply action</string>
 
     <!-- Sync Preferences -->

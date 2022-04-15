@@ -1,4 +1,4 @@
-package me.liquaristo.reldom
+package me.liquidaristocracy.reldom
 
 import org.junit.Test
 
